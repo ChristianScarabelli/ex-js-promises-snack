@@ -46,20 +46,51 @@ Modifica la funzione in creaLanciaDado(), che restituisce una closure che memori
 Se il numero esce due volte di fila, stampa "Incredibile!".
 */
 
-function lanciaDado() {
-    return new Promise((resolve, reject) => {
-        console.log('Dado lanciato')
-        setTimeout(() => {
-            if (Math.random() < 0.2) {
-                reject('Dado incastrato!')
-            } else {
-                const risultato = Math.floor(Math.random() * 6) + 1
-                resolve(risultato)
-            }
-        }, 3000)
-    })
+// function lanciaDado() {
+//     return new Promise((resolve, reject) => {
+//         console.log('Dado lanciato')
+//         setTimeout(() => {
+//             if (Math.random() < 0.2) {
+//                 reject('Dado incastrato!')
+//             } else {
+//                 const risultato = Math.floor(Math.random() * 6) + 1
+//                 resolve(risultato)
+//             }
+//         }, 3000)
+//     })
+// }
+
+// lanciaDado()
+//     .then(risultato => console.log('Numero del dado:', risultato))
+//     .catch(err => console.error(err))
+
+
+function creaLanciaDado() {
+
+    let ultimoLancio = null
+
+    return function () {
+        return new Promise((resolve, reject) => {
+            console.log('Dado lanciato')
+            setTimeout(() => {
+                if (Math.random() < 0.2) {
+                    ultimoLancio = null // se il dado si incastra non salvo il risultato
+                    reject('Dado incastrato!')
+                } else {
+                    const risultato = Math.floor(Math.random() * 6) + 1
+                    if (risultato === ultimoLancio) {
+                        console.log('Incredibile! 2 lanci uguali di fila')
+                    }
+                    ultimoLancio = risultato // salvo il risultato nella variabile
+                    resolve(risultato)
+                }
+            }, 3000)
+        })
+    }
 }
 
-lanciaDado()
+const lanciaDadoConMemoria = creaLanciaDado()
+
+lanciaDadoConMemoria()
     .then(risultato => console.log('Numero del dado:', risultato))
     .catch(err => console.error(err))

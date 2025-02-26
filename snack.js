@@ -47,21 +47,19 @@ Se il numero esce due volte di fila, stampa "Incredibile!".
 */
 
 function lanciaDado() {
-    const promessaDado = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         console.log('Dado lanciato')
         setTimeout(() => {
-            const numeroDado = Math.floor(Math.random() * 6) + 1
-            if (numeroDado === 1) {
+            if (Math.random() < 0.2) {
                 reject('Dado incastrato!')
             } else {
-                resolve(numeroDado)
+                const risultato = Math.floor(Math.random() * 6) + 1
+                resolve(risultato)
             }
-        }
-            , 3000)
+        }, 3000)
     })
-    return promessaDado
 }
 
 lanciaDado()
-    .then(numeri => console.log('Numero del dado', numeri))
+    .then(risultato => console.log('Numero del dado:', risultato))
     .catch(err => console.error(err))
